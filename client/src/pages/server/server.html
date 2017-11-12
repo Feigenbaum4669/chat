@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Server</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let msg of chat.messages">
+      <label>
+        {{msg.author.name}}
+      </label><br>
+      <p>
+        {{msg.text}}
+      </p>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-item>
+    <ion-icon name="attach" clear item-left></ion-icon>
+    <ion-input placeholder="Send Message" [(ngModel)]="message" (keypress)="keyPressed($event.keyCode)"></ion-input>
+    <button item-right clear large (click)='send()'>
+      <ion-icon name="send"></ion-icon>
+    </button>
+  </ion-item>
+</ion-footer>

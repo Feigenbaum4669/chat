@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+// Base mesage. All websocket messages are Packets and contains other messages
+message Packet {
+    oneof content {
+        Handshake handshake = 1;
+        ServerStatus serverStatus = 2;
+        UserConnected userConnected = 3;
+        UserDisconnected userDisconnected = 4;
+        RoomCreated roomCreated = 5;
+        RoomClosed roomClosed = 6;
+        JoinRoom joinRoom = 7;
+        UserMoved userMoved = 8;
+        TextMessage textMessage = 9;
+    }
+}
+
+// Sent from client to server on start
+message Handshake {
+    string username = 1;
+}
+
+// Response from server to handshake. Contains list of rooms containing other users
+message ServerStatus {
+    message Room {
+        string name = 1;
+        repeated UserConnected users = 2;
+    }
+
+    string yourUUID = 1;
+    repeated Room rooms = 2;
+}
+
+// Sent to clients when new user connects
+message UserConnected {
+    string uuid = 1;
+    string username = 2;
+    string room = 3;
+}
+
+// Sent to clients when user disconnects
+message UserDisconnected {
+    string uuid = 1;
+    string reason = 2;
+}
+
+// Sent to clients when room is created
+message RoomCreated {
+    string name = 1;
+}
+
+// Sent to clients when room is closed
+message RoomClosed {
+    string name = 1;
+}
+
+// Sent to server when user wants to join(or create if not exists) some room
+message JoinRoom {
+    string name = 1;
+}
+
+// Sent to clients when user changes room
+message UserMoved {
+    string uuid = 1;
+    string room = 2;
+}
+
+// Sent both ways
+message TextMessage {
+    string userUUID = 1;
+    string message = 2;
+}

@@ -1,0 +1,32 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>Rooms</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-list>
+      <span *ngFor="let row of menuRows">
+        <button ion-item *ngIf="!row.room" menuClose (click)="roomChange(row)" class="room">
+          {{row.name}} ({{row.users.length}})
+        </button>
+        <button ion-item *ngIf="row.room" menuClose class="user">
+          -> {{row.name}} {{row.local ? "(You)" : ""}}
+        </button>
+      </span>
+    </ion-list>
+  </ion-content>
+
+  <ion-footer>
+    <button ion-item menuClose (click)="newRoom()">
+      Create Room
+    </button>
+    <button ion-item menuClose (click)="disconnect()">
+      Disconnect
+    </button>
+  </ion-footer>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

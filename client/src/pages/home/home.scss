@@ -1,0 +1,16 @@
+page-home {
+  text-align: center;
+
+  .loginBox {
+    width: 90%;
+    max-width: 500px;
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px;
+    border: 3px solid gray;
+    border-radius: 15px;
+  }
+}
