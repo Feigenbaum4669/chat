@@ -10,7 +10,24 @@ page-home {
     left: 50%;
     transform: translate(-50%, -50%);
     padding: 15px;
-    border: 3px solid gray;
+    border: 3px solid #042c62;
     border-radius: 15px;
+	background: #002448;
+  }
+  .loginField {
+	padding: 0px;
+	background: #002448;
+  }
+  .ion-input {
+	color: #ffffff;
+  }
+  .content {
+	background-color: #e5e5e5;
+  }
+  .p {
+	color: #e5e5e5;
+  }
+  .button {
+	background-color: #003365;
   }
 }
