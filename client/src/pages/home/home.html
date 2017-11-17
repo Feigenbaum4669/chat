@@ -1,22 +1,23 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Login</ion-title>
+	<ion-title>Welcome! Log in please...</ion-title>
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding >
   <div class="loginBox">
-    <h3>Connect to server</h3>
-    <ion-item>
-      <ion-label color="primary" floating>Server address</ion-label>
-      <ion-input [(ngModel)]="ip"></ion-input>
+    <h3 style="color:white;">Connect to server</h3>
+	<img src="assets/imgs/main-logo.png" width="80" height="80" align="middle" alt="Zaloguj sie" title="Witaj!"/>
+    <ion-item class="loginField">
+      <ion-label floating>Server address</ion-label>
+      <ion-input class="ion-input" [(ngModel)]="ip"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-label color="primary" floating>Username</ion-label>
-      <ion-input [(ngModel)]="username"></ion-input>
+    <ion-item class="loginField">
+      <ion-label floating>Username</ion-label>
+      <ion-input class="ion-input" [(ngModel)]="username"></ion-input>
     </ion-item>
     <br>
-    <button ion-button icon-start (click)='connect();'>
+    <button class="button" ion-button icon-start (click)='connect();'>
       Connect&emsp;
       <ion-icon name="ios-log-in"></ion-icon>
     </button>

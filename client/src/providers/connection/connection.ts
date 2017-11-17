@@ -43,7 +43,7 @@ export class ConnectionProvider {
 
     await this.ws.send(proto.Packet.encode(packet).finish(), WebSocketSendMode.Promise, true).catch(err => this.ws.onErrorHandler(err));
   }
-
+  
   static toBuffer(blob: Blob): Promise<Buffer> {
     return new Promise((acc, rej) => {
       b2b(blob, (err, buf) => {
