@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import saveAs from 'save-file';
 import {Packet} from "../../proto/proto";
 import {RoomsProvider} from "../rooms/rooms";
 import User from "../rooms/user";
@@ -51,8 +52,11 @@ export class PacketHandlerProvider {
       case "roomClosed":
         this.rooms.rooms = this.rooms.rooms.filter(room => room.name !== packet.roomClosed.name);
         break;
-      case "textMessage":
-        this.chat.addText(packet.textMessage);
+      case "chatMessage":
+        this.chat.addText(packet.chatMessage);
+        break;
+      case "requestedFile":
+        saveAs(packet.requestedFile.content, packet.requestedFile.filename);
         break;
       default:
         throw new Error("Unknown message type: "+packet.content);

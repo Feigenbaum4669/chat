@@ -11,7 +11,9 @@ message Packet {
         RoomClosed roomClosed = 6;
         JoinRoom joinRoom = 7;
         UserMoved userMoved = 8;
-        TextMessage textMessage = 9;
+        ChatMessage chatMessage = 9;
+        RequestFile requestFile = 10;
+        RequestedFile requestedFile = 11;
     }
 }
 
@@ -66,7 +68,31 @@ message UserMoved {
 }
 
 // Sent both ways
-message TextMessage {
-    string userUUID = 1;
-    string message = 2;
+message ChatMessage {
+    message FileFull {
+        string filename = 1;
+        bytes content = 3;
+    }
+    message FileHeader {
+        string uuid = 1;
+        string filename = 2;
+        bytes thumbnail = 3; // null if there is no thumbnail
+    }
+
+    string userUUID = 1; // null if it's sent from client to server
+    string textMessage = 2;
+    FileFull fullFile = 3; // sent from client to server; null if it's a text message
+    FileHeader fileHeader = 4; // sent from server to client; null if it's a text message
+}
+
+// Sent to server when user wants to display/download a file
+message RequestFile {
+    string uuid = 1;
+}
+
+// Sent to client after RequestFile
+message RequestedFile {
+    string uuid = 1;
+    string filename = 2;
+    bytes content = 3;
 }

@@ -1,3 +1,51 @@
 page-list {
 
+  #filePicker{
+    visibility: hidden;
+    position: absolute;
+  }
+
+  button {
+    background: none;
+    height: 46px;
+    margin: 0 !important;
+    padding: 0;
+    display: inline-block;
+    width: 46px;
+  }
+
+  ion-footer ion-item {
+    padding: 0 !important;
+  }
+
+  .message {
+    .author {
+      font-weight: bold;
+    }
+
+    .file {
+      margin-top: 13px;
+      cursor: pointer;
+
+      .fileimg {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        vertical-align: middle;
+        position: relative;
+        text-align: center;
+      }
+
+      .filename {
+        margin-left: 40px;
+        font-family: monospace;
+        color: gray;
+      }
+
+      ion-icon {
+        font-size: 75px;
+        line-height: 100px;
+      }
+    }
+  }
 }
