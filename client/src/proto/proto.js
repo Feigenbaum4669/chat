@@ -13,21 +13,24 @@ export const Packet = $root.Packet = (() => {
      * Properties of a Packet.
      * @exports IPacket
      * @interface IPacket
-     * @property {IHandshake} [handshake] Packet handshake
-     * @property {IServerStatus} [serverStatus] Packet serverStatus
-     * @property {IUserConnected} [userConnected] Packet userConnected
-     * @property {IUserDisconnected} [userDisconnected] Packet userDisconnected
-     * @property {IRoomCreated} [roomCreated] Packet roomCreated
-     * @property {IRoomClosed} [roomClosed] Packet roomClosed
-     * @property {IJoinRoom} [joinRoom] Packet joinRoom
-     * @property {IUserMoved} [userMoved] Packet userMoved
-     * @property {ITextMessage} [textMessage] Packet textMessage
+     * @property {IHandshake|null} [handshake] Packet handshake
+     * @property {IServerStatus|null} [serverStatus] Packet serverStatus
+     * @property {IUserConnected|null} [userConnected] Packet userConnected
+     * @property {IUserDisconnected|null} [userDisconnected] Packet userDisconnected
+     * @property {IRoomCreated|null} [roomCreated] Packet roomCreated
+     * @property {IRoomClosed|null} [roomClosed] Packet roomClosed
+     * @property {IJoinRoom|null} [joinRoom] Packet joinRoom
+     * @property {IUserMoved|null} [userMoved] Packet userMoved
+     * @property {IChatMessage|null} [chatMessage] Packet chatMessage
+     * @property {IRequestFile|null} [requestFile] Packet requestFile
+     * @property {IRequestedFile|null} [requestedFile] Packet requestedFile
      */
 
     /**
      * Constructs a new Packet.
      * @exports Packet
      * @classdesc Represents a Packet.
+     * @implements IPacket
      * @constructor
      * @param {IPacket=} [properties] Properties to set
      */
@@ -40,7 +43,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet handshake.
-     * @member {(IHandshake|null|undefined)}handshake
+     * @member {IHandshake|null|undefined} handshake
      * @memberof Packet
      * @instance
      */
@@ -48,7 +51,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet serverStatus.
-     * @member {(IServerStatus|null|undefined)}serverStatus
+     * @member {IServerStatus|null|undefined} serverStatus
      * @memberof Packet
      * @instance
      */
@@ -56,7 +59,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet userConnected.
-     * @member {(IUserConnected|null|undefined)}userConnected
+     * @member {IUserConnected|null|undefined} userConnected
      * @memberof Packet
      * @instance
      */
@@ -64,7 +67,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet userDisconnected.
-     * @member {(IUserDisconnected|null|undefined)}userDisconnected
+     * @member {IUserDisconnected|null|undefined} userDisconnected
      * @memberof Packet
      * @instance
      */
@@ -72,7 +75,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet roomCreated.
-     * @member {(IRoomCreated|null|undefined)}roomCreated
+     * @member {IRoomCreated|null|undefined} roomCreated
      * @memberof Packet
      * @instance
      */
@@ -80,7 +83,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet roomClosed.
-     * @member {(IRoomClosed|null|undefined)}roomClosed
+     * @member {IRoomClosed|null|undefined} roomClosed
      * @memberof Packet
      * @instance
      */
@@ -88,7 +91,7 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet joinRoom.
-     * @member {(IJoinRoom|null|undefined)}joinRoom
+     * @member {IJoinRoom|null|undefined} joinRoom
      * @memberof Packet
      * @instance
      */
@@ -96,31 +99,47 @@ export const Packet = $root.Packet = (() => {
 
     /**
      * Packet userMoved.
-     * @member {(IUserMoved|null|undefined)}userMoved
+     * @member {IUserMoved|null|undefined} userMoved
      * @memberof Packet
      * @instance
      */
     Packet.prototype.userMoved = null;
 
     /**
-     * Packet textMessage.
-     * @member {(ITextMessage|null|undefined)}textMessage
+     * Packet chatMessage.
+     * @member {IChatMessage|null|undefined} chatMessage
      * @memberof Packet
      * @instance
      */
-    Packet.prototype.textMessage = null;
+    Packet.prototype.chatMessage = null;
+
+    /**
+     * Packet requestFile.
+     * @member {IRequestFile|null|undefined} requestFile
+     * @memberof Packet
+     * @instance
+     */
+    Packet.prototype.requestFile = null;
+
+    /**
+     * Packet requestedFile.
+     * @member {IRequestedFile|null|undefined} requestedFile
+     * @memberof Packet
+     * @instance
+     */
+    Packet.prototype.requestedFile = null;
 
     // OneOf field names bound to virtual getters and setters
     let $oneOfFields;
 
     /**
      * Packet content.
-     * @member {string|undefined} content
+     * @member {"handshake"|"serverStatus"|"userConnected"|"userDisconnected"|"roomCreated"|"roomClosed"|"joinRoom"|"userMoved"|"chatMessage"|"requestFile"|"requestedFile"|undefined} content
      * @memberof Packet
      * @instance
      */
     Object.defineProperty(Packet.prototype, "content", {
-        get: $util.oneOfGetter($oneOfFields = ["handshake", "serverStatus", "userConnected", "userDisconnected", "roomCreated", "roomClosed", "joinRoom", "userMoved", "textMessage"]),
+        get: $util.oneOfGetter($oneOfFields = ["handshake", "serverStatus", "userConnected", "userDisconnected", "roomCreated", "roomClosed", "joinRoom", "userMoved", "chatMessage", "requestFile", "requestedFile"]),
         set: $util.oneOfSetter($oneOfFields)
     });
 
@@ -164,8 +183,12 @@ export const Packet = $root.Packet = (() => {
             $root.JoinRoom.encode(message.joinRoom, writer.uint32(/* id 7, wireType 2 =*/58).fork()).ldelim();
         if (message.userMoved != null && message.hasOwnProperty("userMoved"))
             $root.UserMoved.encode(message.userMoved, writer.uint32(/* id 8, wireType 2 =*/66).fork()).ldelim();
-        if (message.textMessage != null && message.hasOwnProperty("textMessage"))
-            $root.TextMessage.encode(message.textMessage, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+        if (message.chatMessage != null && message.hasOwnProperty("chatMessage"))
+            $root.ChatMessage.encode(message.chatMessage, writer.uint32(/* id 9, wireType 2 =*/74).fork()).ldelim();
+        if (message.requestFile != null && message.hasOwnProperty("requestFile"))
+            $root.RequestFile.encode(message.requestFile, writer.uint32(/* id 10, wireType 2 =*/82).fork()).ldelim();
+        if (message.requestedFile != null && message.hasOwnProperty("requestedFile"))
+            $root.RequestedFile.encode(message.requestedFile, writer.uint32(/* id 11, wireType 2 =*/90).fork()).ldelim();
         return writer;
     };
 
@@ -225,7 +248,13 @@ export const Packet = $root.Packet = (() => {
                 message.userMoved = $root.UserMoved.decode(reader, reader.uint32());
                 break;
             case 9:
-                message.textMessage = $root.TextMessage.decode(reader, reader.uint32());
+                message.chatMessage = $root.ChatMessage.decode(reader, reader.uint32());
+                break;
+            case 10:
+                message.requestFile = $root.RequestFile.decode(reader, reader.uint32());
+                break;
+            case 11:
+                message.requestedFile = $root.RequestedFile.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -265,73 +294,111 @@ export const Packet = $root.Packet = (() => {
         let properties = {};
         if (message.handshake != null && message.hasOwnProperty("handshake")) {
             properties.content = 1;
-            let error = $root.Handshake.verify(message.handshake);
-            if (error)
-                return "handshake." + error;
+            {
+                let error = $root.Handshake.verify(message.handshake);
+                if (error)
+                    return "handshake." + error;
+            }
         }
         if (message.serverStatus != null && message.hasOwnProperty("serverStatus")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.ServerStatus.verify(message.serverStatus);
-            if (error)
-                return "serverStatus." + error;
+            {
+                let error = $root.ServerStatus.verify(message.serverStatus);
+                if (error)
+                    return "serverStatus." + error;
+            }
         }
         if (message.userConnected != null && message.hasOwnProperty("userConnected")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.UserConnected.verify(message.userConnected);
-            if (error)
-                return "userConnected." + error;
+            {
+                let error = $root.UserConnected.verify(message.userConnected);
+                if (error)
+                    return "userConnected." + error;
+            }
         }
         if (message.userDisconnected != null && message.hasOwnProperty("userDisconnected")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.UserDisconnected.verify(message.userDisconnected);
-            if (error)
-                return "userDisconnected." + error;
+            {
+                let error = $root.UserDisconnected.verify(message.userDisconnected);
+                if (error)
+                    return "userDisconnected." + error;
+            }
         }
         if (message.roomCreated != null && message.hasOwnProperty("roomCreated")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.RoomCreated.verify(message.roomCreated);
-            if (error)
-                return "roomCreated." + error;
+            {
+                let error = $root.RoomCreated.verify(message.roomCreated);
+                if (error)
+                    return "roomCreated." + error;
+            }
         }
         if (message.roomClosed != null && message.hasOwnProperty("roomClosed")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.RoomClosed.verify(message.roomClosed);
-            if (error)
-                return "roomClosed." + error;
+            {
+                let error = $root.RoomClosed.verify(message.roomClosed);
+                if (error)
+                    return "roomClosed." + error;
+            }
         }
         if (message.joinRoom != null && message.hasOwnProperty("joinRoom")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.JoinRoom.verify(message.joinRoom);
-            if (error)
-                return "joinRoom." + error;
+            {
+                let error = $root.JoinRoom.verify(message.joinRoom);
+                if (error)
+                    return "joinRoom." + error;
+            }
         }
         if (message.userMoved != null && message.hasOwnProperty("userMoved")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.UserMoved.verify(message.userMoved);
-            if (error)
-                return "userMoved." + error;
+            {
+                let error = $root.UserMoved.verify(message.userMoved);
+                if (error)
+                    return "userMoved." + error;
+            }
         }
-        if (message.textMessage != null && message.hasOwnProperty("textMessage")) {
+        if (message.chatMessage != null && message.hasOwnProperty("chatMessage")) {
             if (properties.content === 1)
                 return "content: multiple values";
             properties.content = 1;
-            error = $root.TextMessage.verify(message.textMessage);
-            if (error)
-                return "textMessage." + error;
+            {
+                let error = $root.ChatMessage.verify(message.chatMessage);
+                if (error)
+                    return "chatMessage." + error;
+            }
+        }
+        if (message.requestFile != null && message.hasOwnProperty("requestFile")) {
+            if (properties.content === 1)
+                return "content: multiple values";
+            properties.content = 1;
+            {
+                let error = $root.RequestFile.verify(message.requestFile);
+                if (error)
+                    return "requestFile." + error;
+            }
+        }
+        if (message.requestedFile != null && message.hasOwnProperty("requestedFile")) {
+            if (properties.content === 1)
+                return "content: multiple values";
+            properties.content = 1;
+            {
+                let error = $root.RequestedFile.verify(message.requestedFile);
+                if (error)
+                    return "requestedFile." + error;
+            }
         }
         return null;
     };
@@ -388,10 +455,20 @@ export const Packet = $root.Packet = (() => {
                 throw TypeError(".Packet.userMoved: object expected");
             message.userMoved = $root.UserMoved.fromObject(object.userMoved);
         }
-        if (object.textMessage != null) {
-            if (typeof object.textMessage !== "object")
-                throw TypeError(".Packet.textMessage: object expected");
-            message.textMessage = $root.TextMessage.fromObject(object.textMessage);
+        if (object.chatMessage != null) {
+            if (typeof object.chatMessage !== "object")
+                throw TypeError(".Packet.chatMessage: object expected");
+            message.chatMessage = $root.ChatMessage.fromObject(object.chatMessage);
+        }
+        if (object.requestFile != null) {
+            if (typeof object.requestFile !== "object")
+                throw TypeError(".Packet.requestFile: object expected");
+            message.requestFile = $root.RequestFile.fromObject(object.requestFile);
+        }
+        if (object.requestedFile != null) {
+            if (typeof object.requestedFile !== "object")
+                throw TypeError(".Packet.requestedFile: object expected");
+            message.requestedFile = $root.RequestedFile.fromObject(object.requestedFile);
         }
         return message;
     };
@@ -449,10 +526,20 @@ export const Packet = $root.Packet = (() => {
             if (options.oneofs)
                 object.content = "userMoved";
         }
-        if (message.textMessage != null && message.hasOwnProperty("textMessage")) {
-            object.textMessage = $root.TextMessage.toObject(message.textMessage, options);
+        if (message.chatMessage != null && message.hasOwnProperty("chatMessage")) {
+            object.chatMessage = $root.ChatMessage.toObject(message.chatMessage, options);
             if (options.oneofs)
-                object.content = "textMessage";
+                object.content = "chatMessage";
+        }
+        if (message.requestFile != null && message.hasOwnProperty("requestFile")) {
+            object.requestFile = $root.RequestFile.toObject(message.requestFile, options);
+            if (options.oneofs)
+                object.content = "requestFile";
+        }
+        if (message.requestedFile != null && message.hasOwnProperty("requestedFile")) {
+            object.requestedFile = $root.RequestedFile.toObject(message.requestedFile, options);
+            if (options.oneofs)
+                object.content = "requestedFile";
         }
         return object;
     };
@@ -477,13 +564,14 @@ export const Handshake = $root.Handshake = (() => {
      * Properties of a Handshake.
      * @exports IHandshake
      * @interface IHandshake
-     * @property {string} [username] Handshake username
+     * @property {string|null} [username] Handshake username
      */
 
     /**
      * Constructs a new Handshake.
      * @exports Handshake
      * @classdesc Represents a Handshake.
+     * @implements IHandshake
      * @constructor
      * @param {IHandshake=} [properties] Properties to set
      */
@@ -496,7 +584,7 @@ export const Handshake = $root.Handshake = (() => {
 
     /**
      * Handshake username.
-     * @member {string}username
+     * @member {string} username
      * @memberof Handshake
      * @instance
      */
@@ -663,14 +751,15 @@ export const ServerStatus = $root.ServerStatus = (() => {
      * Properties of a ServerStatus.
      * @exports IServerStatus
      * @interface IServerStatus
-     * @property {string} [yourUUID] ServerStatus yourUUID
-     * @property {Array.<ServerStatus.IRoom>} [rooms] ServerStatus rooms
+     * @property {string|null} [yourUUID] ServerStatus yourUUID
+     * @property {Array.<ServerStatus.IRoom>|null} [rooms] ServerStatus rooms
      */
 
     /**
      * Constructs a new ServerStatus.
      * @exports ServerStatus
      * @classdesc Represents a ServerStatus.
+     * @implements IServerStatus
      * @constructor
      * @param {IServerStatus=} [properties] Properties to set
      */
@@ -684,7 +773,7 @@ export const ServerStatus = $root.ServerStatus = (() => {
 
     /**
      * ServerStatus yourUUID.
-     * @member {string}yourUUID
+     * @member {string} yourUUID
      * @memberof ServerStatus
      * @instance
      */
@@ -692,7 +781,7 @@ export const ServerStatus = $root.ServerStatus = (() => {
 
     /**
      * ServerStatus rooms.
-     * @member {Array.<ServerStatus.IRoom>}rooms
+     * @member {Array.<ServerStatus.IRoom>} rooms
      * @memberof ServerStatus
      * @instance
      */
@@ -890,14 +979,15 @@ export const ServerStatus = $root.ServerStatus = (() => {
          * Properties of a Room.
          * @memberof ServerStatus
          * @interface IRoom
-         * @property {string} [name] Room name
-         * @property {Array.<IUserConnected>} [users] Room users
+         * @property {string|null} [name] Room name
+         * @property {Array.<IUserConnected>|null} [users] Room users
          */
 
         /**
          * Constructs a new Room.
          * @memberof ServerStatus
          * @classdesc Represents a Room.
+         * @implements IRoom
          * @constructor
          * @param {ServerStatus.IRoom=} [properties] Properties to set
          */
@@ -911,7 +1001,7 @@ export const ServerStatus = $root.ServerStatus = (() => {
 
         /**
          * Room name.
-         * @member {string}name
+         * @member {string} name
          * @memberof ServerStatus.Room
          * @instance
          */
@@ -919,7 +1009,7 @@ export const ServerStatus = $root.ServerStatus = (() => {
 
         /**
          * Room users.
-         * @member {Array.<IUserConnected>}users
+         * @member {Array.<IUserConnected>} users
          * @memberof ServerStatus.Room
          * @instance
          */
@@ -1123,15 +1213,16 @@ export const UserConnected = $root.UserConnected = (() => {
      * Properties of a UserConnected.
      * @exports IUserConnected
      * @interface IUserConnected
-     * @property {string} [uuid] UserConnected uuid
-     * @property {string} [username] UserConnected username
-     * @property {string} [room] UserConnected room
+     * @property {string|null} [uuid] UserConnected uuid
+     * @property {string|null} [username] UserConnected username
+     * @property {string|null} [room] UserConnected room
      */
 
     /**
      * Constructs a new UserConnected.
      * @exports UserConnected
      * @classdesc Represents a UserConnected.
+     * @implements IUserConnected
      * @constructor
      * @param {IUserConnected=} [properties] Properties to set
      */
@@ -1144,7 +1235,7 @@ export const UserConnected = $root.UserConnected = (() => {
 
     /**
      * UserConnected uuid.
-     * @member {string}uuid
+     * @member {string} uuid
      * @memberof UserConnected
      * @instance
      */
@@ -1152,7 +1243,7 @@ export const UserConnected = $root.UserConnected = (() => {
 
     /**
      * UserConnected username.
-     * @member {string}username
+     * @member {string} username
      * @memberof UserConnected
      * @instance
      */
@@ -1160,7 +1251,7 @@ export const UserConnected = $root.UserConnected = (() => {
 
     /**
      * UserConnected room.
-     * @member {string}room
+     * @member {string} room
      * @memberof UserConnected
      * @instance
      */
@@ -1354,14 +1445,15 @@ export const UserDisconnected = $root.UserDisconnected = (() => {
      * Properties of a UserDisconnected.
      * @exports IUserDisconnected
      * @interface IUserDisconnected
-     * @property {string} [uuid] UserDisconnected uuid
-     * @property {string} [reason] UserDisconnected reason
+     * @property {string|null} [uuid] UserDisconnected uuid
+     * @property {string|null} [reason] UserDisconnected reason
      */
 
     /**
      * Constructs a new UserDisconnected.
      * @exports UserDisconnected
      * @classdesc Represents a UserDisconnected.
+     * @implements IUserDisconnected
      * @constructor
      * @param {IUserDisconnected=} [properties] Properties to set
      */
@@ -1374,7 +1466,7 @@ export const UserDisconnected = $root.UserDisconnected = (() => {
 
     /**
      * UserDisconnected uuid.
-     * @member {string}uuid
+     * @member {string} uuid
      * @memberof UserDisconnected
      * @instance
      */
@@ -1382,7 +1474,7 @@ export const UserDisconnected = $root.UserDisconnected = (() => {
 
     /**
      * UserDisconnected reason.
-     * @member {string}reason
+     * @member {string} reason
      * @memberof UserDisconnected
      * @instance
      */
@@ -1563,13 +1655,14 @@ export const RoomCreated = $root.RoomCreated = (() => {
      * Properties of a RoomCreated.
      * @exports IRoomCreated
      * @interface IRoomCreated
-     * @property {string} [name] RoomCreated name
+     * @property {string|null} [name] RoomCreated name
      */
 
     /**
      * Constructs a new RoomCreated.
      * @exports RoomCreated
      * @classdesc Represents a RoomCreated.
+     * @implements IRoomCreated
      * @constructor
      * @param {IRoomCreated=} [properties] Properties to set
      */
@@ -1582,7 +1675,7 @@ export const RoomCreated = $root.RoomCreated = (() => {
 
     /**
      * RoomCreated name.
-     * @member {string}name
+     * @member {string} name
      * @memberof RoomCreated
      * @instance
      */
@@ -1749,13 +1842,14 @@ export const RoomClosed = $root.RoomClosed = (() => {
      * Properties of a RoomClosed.
      * @exports IRoomClosed
      * @interface IRoomClosed
-     * @property {string} [name] RoomClosed name
+     * @property {string|null} [name] RoomClosed name
      */
 
     /**
      * Constructs a new RoomClosed.
      * @exports RoomClosed
      * @classdesc Represents a RoomClosed.
+     * @implements IRoomClosed
      * @constructor
      * @param {IRoomClosed=} [properties] Properties to set
      */
@@ -1768,7 +1862,7 @@ export const RoomClosed = $root.RoomClosed = (() => {
 
     /**
      * RoomClosed name.
-     * @member {string}name
+     * @member {string} name
      * @memberof RoomClosed
      * @instance
      */
@@ -1935,13 +2029,14 @@ export const JoinRoom = $root.JoinRoom = (() => {
      * Properties of a JoinRoom.
      * @exports IJoinRoom
      * @interface IJoinRoom
-     * @property {string} [name] JoinRoom name
+     * @property {string|null} [name] JoinRoom name
      */
 
     /**
      * Constructs a new JoinRoom.
      * @exports JoinRoom
      * @classdesc Represents a JoinRoom.
+     * @implements IJoinRoom
      * @constructor
      * @param {IJoinRoom=} [properties] Properties to set
      */
@@ -1954,7 +2049,7 @@ export const JoinRoom = $root.JoinRoom = (() => {
 
     /**
      * JoinRoom name.
-     * @member {string}name
+     * @member {string} name
      * @memberof JoinRoom
      * @instance
      */
@@ -2121,14 +2216,15 @@ export const UserMoved = $root.UserMoved = (() => {
      * Properties of a UserMoved.
      * @exports IUserMoved
      * @interface IUserMoved
-     * @property {string} [uuid] UserMoved uuid
-     * @property {string} [room] UserMoved room
+     * @property {string|null} [uuid] UserMoved uuid
+     * @property {string|null} [room] UserMoved room
      */
 
     /**
      * Constructs a new UserMoved.
      * @exports UserMoved
      * @classdesc Represents a UserMoved.
+     * @implements IUserMoved
      * @constructor
      * @param {IUserMoved=} [properties] Properties to set
      */
@@ -2141,7 +2237,7 @@ export const UserMoved = $root.UserMoved = (() => {
 
     /**
      * UserMoved uuid.
-     * @member {string}uuid
+     * @member {string} uuid
      * @memberof UserMoved
      * @instance
      */
@@ -2149,7 +2245,7 @@ export const UserMoved = $root.UserMoved = (() => {
 
     /**
      * UserMoved room.
-     * @member {string}room
+     * @member {string} room
      * @memberof UserMoved
      * @instance
      */
@@ -2324,24 +2420,27 @@ export const UserMoved = $root.UserMoved = (() => {
     return UserMoved;
 })();
 
-export const TextMessage = $root.TextMessage = (() => {
+export const ChatMessage = $root.ChatMessage = (() => {
 
     /**
-     * Properties of a TextMessage.
-     * @exports ITextMessage
-     * @interface ITextMessage
-     * @property {string} [userUUID] TextMessage userUUID
-     * @property {string} [message] TextMessage message
+     * Properties of a ChatMessage.
+     * @exports IChatMessage
+     * @interface IChatMessage
+     * @property {string|null} [userUUID] ChatMessage userUUID
+     * @property {string|null} [textMessage] ChatMessage textMessage
+     * @property {ChatMessage.IFileFull|null} [fullFile] ChatMessage fullFile
+     * @property {ChatMessage.IFileHeader|null} [fileHeader] ChatMessage fileHeader
      */
 
     /**
-     * Constructs a new TextMessage.
-     * @exports TextMessage
-     * @classdesc Represents a TextMessage.
+     * Constructs a new ChatMessage.
+     * @exports ChatMessage
+     * @classdesc Represents a ChatMessage.
+     * @implements IChatMessage
      * @constructor
-     * @param {ITextMessage=} [properties] Properties to set
+     * @param {IChatMessage=} [properties] Properties to set
      */
-    function TextMessage(properties) {
+    function ChatMessage(properties) {
         if (properties)
             for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
                 if (properties[keys[i]] != null)
@@ -2349,80 +2448,100 @@ export const TextMessage = $root.TextMessage = (() => {
     }
 
     /**
-     * TextMessage userUUID.
-     * @member {string}userUUID
-     * @memberof TextMessage
+     * ChatMessage userUUID.
+     * @member {string} userUUID
+     * @memberof ChatMessage
      * @instance
      */
-    TextMessage.prototype.userUUID = "";
+    ChatMessage.prototype.userUUID = "";
 
     /**
-     * TextMessage message.
-     * @member {string}message
-     * @memberof TextMessage
+     * ChatMessage textMessage.
+     * @member {string} textMessage
+     * @memberof ChatMessage
      * @instance
      */
-    TextMessage.prototype.message = "";
+    ChatMessage.prototype.textMessage = "";
 
     /**
-     * Creates a new TextMessage instance using the specified properties.
+     * ChatMessage fullFile.
+     * @member {ChatMessage.IFileFull|null|undefined} fullFile
+     * @memberof ChatMessage
+     * @instance
+     */
+    ChatMessage.prototype.fullFile = null;
+
+    /**
+     * ChatMessage fileHeader.
+     * @member {ChatMessage.IFileHeader|null|undefined} fileHeader
+     * @memberof ChatMessage
+     * @instance
+     */
+    ChatMessage.prototype.fileHeader = null;
+
+    /**
+     * Creates a new ChatMessage instance using the specified properties.
      * @function create
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
-     * @param {ITextMessage=} [properties] Properties to set
-     * @returns {TextMessage} TextMessage instance
+     * @param {IChatMessage=} [properties] Properties to set
+     * @returns {ChatMessage} ChatMessage instance
      */
-    TextMessage.create = function create(properties) {
-        return new TextMessage(properties);
+    ChatMessage.create = function create(properties) {
+        return new ChatMessage(properties);
     };
 
     /**
-     * Encodes the specified TextMessage message. Does not implicitly {@link TextMessage.verify|verify} messages.
+     * Encodes the specified ChatMessage message. Does not implicitly {@link ChatMessage.verify|verify} messages.
      * @function encode
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
-     * @param {ITextMessage} message TextMessage message or plain object to encode
+     * @param {IChatMessage} message ChatMessage message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    TextMessage.encode = function encode(message, writer) {
+    ChatMessage.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
         if (message.userUUID != null && message.hasOwnProperty("userUUID"))
             writer.uint32(/* id 1, wireType 2 =*/10).string(message.userUUID);
-        if (message.message != null && message.hasOwnProperty("message"))
-            writer.uint32(/* id 2, wireType 2 =*/18).string(message.message);
+        if (message.textMessage != null && message.hasOwnProperty("textMessage"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.textMessage);
+        if (message.fullFile != null && message.hasOwnProperty("fullFile"))
+            $root.ChatMessage.FileFull.encode(message.fullFile, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+        if (message.fileHeader != null && message.hasOwnProperty("fileHeader"))
+            $root.ChatMessage.FileHeader.encode(message.fileHeader, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         return writer;
     };
 
     /**
-     * Encodes the specified TextMessage message, length delimited. Does not implicitly {@link TextMessage.verify|verify} messages.
+     * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link ChatMessage.verify|verify} messages.
      * @function encodeDelimited
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
-     * @param {ITextMessage} message TextMessage message or plain object to encode
+     * @param {IChatMessage} message ChatMessage message or plain object to encode
      * @param {$protobuf.Writer} [writer] Writer to encode to
      * @returns {$protobuf.Writer} Writer
      */
-    TextMessage.encodeDelimited = function encodeDelimited(message, writer) {
+    ChatMessage.encodeDelimited = function encodeDelimited(message, writer) {
         return this.encode(message, writer).ldelim();
     };
 
     /**
-     * Decodes a TextMessage message from the specified reader or buffer.
+     * Decodes a ChatMessage message from the specified reader or buffer.
      * @function decode
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
      * @param {number} [length] Message length if known beforehand
-     * @returns {TextMessage} TextMessage
+     * @returns {ChatMessage} ChatMessage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    TextMessage.decode = function decode(reader, length) {
+    ChatMessage.decode = function decode(reader, length) {
         if (!(reader instanceof $Reader))
             reader = $Reader.create(reader);
-        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.TextMessage();
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChatMessage();
         while (reader.pos < end) {
             let tag = reader.uint32();
             switch (tag >>> 3) {
@@ -2430,7 +2549,13 @@ export const TextMessage = $root.TextMessage = (() => {
                 message.userUUID = reader.string();
                 break;
             case 2:
-                message.message = reader.string();
+                message.textMessage = reader.string();
+                break;
+            case 3:
+                message.fullFile = $root.ChatMessage.FileFull.decode(reader, reader.uint32());
+                break;
+            case 4:
+                message.fileHeader = $root.ChatMessage.FileHeader.decode(reader, reader.uint32());
                 break;
             default:
                 reader.skipType(tag & 7);
@@ -2441,96 +2566,992 @@ export const TextMessage = $root.TextMessage = (() => {
     };
 
     /**
-     * Decodes a TextMessage message from the specified reader or buffer, length delimited.
+     * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
      * @function decodeDelimited
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
      * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {TextMessage} TextMessage
+     * @returns {ChatMessage} ChatMessage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    TextMessage.decodeDelimited = function decodeDelimited(reader) {
+    ChatMessage.decodeDelimited = function decodeDelimited(reader) {
         if (!(reader instanceof $Reader))
             reader = new $Reader(reader);
         return this.decode(reader, reader.uint32());
     };
 
     /**
-     * Verifies a TextMessage message.
+     * Verifies a ChatMessage message.
      * @function verify
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
      * @param {Object.<string,*>} message Plain object to verify
      * @returns {string|null} `null` if valid, otherwise the reason why it is not
      */
-    TextMessage.verify = function verify(message) {
+    ChatMessage.verify = function verify(message) {
         if (typeof message !== "object" || message === null)
             return "object expected";
         if (message.userUUID != null && message.hasOwnProperty("userUUID"))
             if (!$util.isString(message.userUUID))
                 return "userUUID: string expected";
-        if (message.message != null && message.hasOwnProperty("message"))
-            if (!$util.isString(message.message))
-                return "message: string expected";
+        if (message.textMessage != null && message.hasOwnProperty("textMessage"))
+            if (!$util.isString(message.textMessage))
+                return "textMessage: string expected";
+        if (message.fullFile != null && message.hasOwnProperty("fullFile")) {
+            let error = $root.ChatMessage.FileFull.verify(message.fullFile);
+            if (error)
+                return "fullFile." + error;
+        }
+        if (message.fileHeader != null && message.hasOwnProperty("fileHeader")) {
+            let error = $root.ChatMessage.FileHeader.verify(message.fileHeader);
+            if (error)
+                return "fileHeader." + error;
+        }
         return null;
     };
 
     /**
-     * Creates a TextMessage message from a plain object. Also converts values to their respective internal types.
+     * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
      * @function fromObject
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
      * @param {Object.<string,*>} object Plain object
-     * @returns {TextMessage} TextMessage
+     * @returns {ChatMessage} ChatMessage
      */
-    TextMessage.fromObject = function fromObject(object) {
-        if (object instanceof $root.TextMessage)
+    ChatMessage.fromObject = function fromObject(object) {
+        if (object instanceof $root.ChatMessage)
             return object;
-        let message = new $root.TextMessage();
+        let message = new $root.ChatMessage();
         if (object.userUUID != null)
             message.userUUID = String(object.userUUID);
-        if (object.message != null)
-            message.message = String(object.message);
+        if (object.textMessage != null)
+            message.textMessage = String(object.textMessage);
+        if (object.fullFile != null) {
+            if (typeof object.fullFile !== "object")
+                throw TypeError(".ChatMessage.fullFile: object expected");
+            message.fullFile = $root.ChatMessage.FileFull.fromObject(object.fullFile);
+        }
+        if (object.fileHeader != null) {
+            if (typeof object.fileHeader !== "object")
+                throw TypeError(".ChatMessage.fileHeader: object expected");
+            message.fileHeader = $root.ChatMessage.FileHeader.fromObject(object.fileHeader);
+        }
         return message;
     };
 
     /**
-     * Creates a plain object from a TextMessage message. Also converts values to other types if specified.
+     * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
      * @function toObject
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @static
-     * @param {TextMessage} message TextMessage
+     * @param {ChatMessage} message ChatMessage
      * @param {$protobuf.IConversionOptions} [options] Conversion options
      * @returns {Object.<string,*>} Plain object
      */
-    TextMessage.toObject = function toObject(message, options) {
+    ChatMessage.toObject = function toObject(message, options) {
         if (!options)
             options = {};
         let object = {};
         if (options.defaults) {
             object.userUUID = "";
-            object.message = "";
+            object.textMessage = "";
+            object.fullFile = null;
+            object.fileHeader = null;
         }
         if (message.userUUID != null && message.hasOwnProperty("userUUID"))
             object.userUUID = message.userUUID;
-        if (message.message != null && message.hasOwnProperty("message"))
-            object.message = message.message;
+        if (message.textMessage != null && message.hasOwnProperty("textMessage"))
+            object.textMessage = message.textMessage;
+        if (message.fullFile != null && message.hasOwnProperty("fullFile"))
+            object.fullFile = $root.ChatMessage.FileFull.toObject(message.fullFile, options);
+        if (message.fileHeader != null && message.hasOwnProperty("fileHeader"))
+            object.fileHeader = $root.ChatMessage.FileHeader.toObject(message.fileHeader, options);
         return object;
     };
 
     /**
-     * Converts this TextMessage to JSON.
+     * Converts this ChatMessage to JSON.
      * @function toJSON
-     * @memberof TextMessage
+     * @memberof ChatMessage
      * @instance
      * @returns {Object.<string,*>} JSON object
      */
-    TextMessage.prototype.toJSON = function toJSON() {
+    ChatMessage.prototype.toJSON = function toJSON() {
         return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
     };
 
-    return TextMessage;
+    ChatMessage.FileFull = (function() {
+
+        /**
+         * Properties of a FileFull.
+         * @memberof ChatMessage
+         * @interface IFileFull
+         * @property {string|null} [filename] FileFull filename
+         * @property {Uint8Array|null} [content] FileFull content
+         */
+
+        /**
+         * Constructs a new FileFull.
+         * @memberof ChatMessage
+         * @classdesc Represents a FileFull.
+         * @implements IFileFull
+         * @constructor
+         * @param {ChatMessage.IFileFull=} [properties] Properties to set
+         */
+        function FileFull(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * FileFull filename.
+         * @member {string} filename
+         * @memberof ChatMessage.FileFull
+         * @instance
+         */
+        FileFull.prototype.filename = "";
+
+        /**
+         * FileFull content.
+         * @member {Uint8Array} content
+         * @memberof ChatMessage.FileFull
+         * @instance
+         */
+        FileFull.prototype.content = $util.newBuffer([]);
+
+        /**
+         * Creates a new FileFull instance using the specified properties.
+         * @function create
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {ChatMessage.IFileFull=} [properties] Properties to set
+         * @returns {ChatMessage.FileFull} FileFull instance
+         */
+        FileFull.create = function create(properties) {
+            return new FileFull(properties);
+        };
+
+        /**
+         * Encodes the specified FileFull message. Does not implicitly {@link ChatMessage.FileFull.verify|verify} messages.
+         * @function encode
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {ChatMessage.IFileFull} message FileFull message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FileFull.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.filename);
+            if (message.content != null && message.hasOwnProperty("content"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.content);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified FileFull message, length delimited. Does not implicitly {@link ChatMessage.FileFull.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {ChatMessage.IFileFull} message FileFull message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FileFull.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a FileFull message from the specified reader or buffer.
+         * @function decode
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ChatMessage.FileFull} FileFull
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FileFull.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChatMessage.FileFull();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.filename = reader.string();
+                    break;
+                case 3:
+                    message.content = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a FileFull message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ChatMessage.FileFull} FileFull
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FileFull.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a FileFull message.
+         * @function verify
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        FileFull.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                if (!$util.isString(message.filename))
+                    return "filename: string expected";
+            if (message.content != null && message.hasOwnProperty("content"))
+                if (!(message.content && typeof message.content.length === "number" || $util.isString(message.content)))
+                    return "content: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a FileFull message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ChatMessage.FileFull} FileFull
+         */
+        FileFull.fromObject = function fromObject(object) {
+            if (object instanceof $root.ChatMessage.FileFull)
+                return object;
+            let message = new $root.ChatMessage.FileFull();
+            if (object.filename != null)
+                message.filename = String(object.filename);
+            if (object.content != null)
+                if (typeof object.content === "string")
+                    $util.base64.decode(object.content, message.content = $util.newBuffer($util.base64.length(object.content)), 0);
+                else if (object.content.length)
+                    message.content = object.content;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a FileFull message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ChatMessage.FileFull
+         * @static
+         * @param {ChatMessage.FileFull} message FileFull
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        FileFull.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.filename = "";
+                object.content = options.bytes === String ? "" : [];
+            }
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                object.filename = message.filename;
+            if (message.content != null && message.hasOwnProperty("content"))
+                object.content = options.bytes === String ? $util.base64.encode(message.content, 0, message.content.length) : options.bytes === Array ? Array.prototype.slice.call(message.content) : message.content;
+            return object;
+        };
+
+        /**
+         * Converts this FileFull to JSON.
+         * @function toJSON
+         * @memberof ChatMessage.FileFull
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        FileFull.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return FileFull;
+    })();
+
+    ChatMessage.FileHeader = (function() {
+
+        /**
+         * Properties of a FileHeader.
+         * @memberof ChatMessage
+         * @interface IFileHeader
+         * @property {string|null} [uuid] FileHeader uuid
+         * @property {string|null} [filename] FileHeader filename
+         * @property {Uint8Array|null} [thumbnail] FileHeader thumbnail
+         */
+
+        /**
+         * Constructs a new FileHeader.
+         * @memberof ChatMessage
+         * @classdesc Represents a FileHeader.
+         * @implements IFileHeader
+         * @constructor
+         * @param {ChatMessage.IFileHeader=} [properties] Properties to set
+         */
+        function FileHeader(properties) {
+            if (properties)
+                for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * FileHeader uuid.
+         * @member {string} uuid
+         * @memberof ChatMessage.FileHeader
+         * @instance
+         */
+        FileHeader.prototype.uuid = "";
+
+        /**
+         * FileHeader filename.
+         * @member {string} filename
+         * @memberof ChatMessage.FileHeader
+         * @instance
+         */
+        FileHeader.prototype.filename = "";
+
+        /**
+         * FileHeader thumbnail.
+         * @member {Uint8Array} thumbnail
+         * @memberof ChatMessage.FileHeader
+         * @instance
+         */
+        FileHeader.prototype.thumbnail = $util.newBuffer([]);
+
+        /**
+         * Creates a new FileHeader instance using the specified properties.
+         * @function create
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {ChatMessage.IFileHeader=} [properties] Properties to set
+         * @returns {ChatMessage.FileHeader} FileHeader instance
+         */
+        FileHeader.create = function create(properties) {
+            return new FileHeader(properties);
+        };
+
+        /**
+         * Encodes the specified FileHeader message. Does not implicitly {@link ChatMessage.FileHeader.verify|verify} messages.
+         * @function encode
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {ChatMessage.IFileHeader} message FileHeader message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FileHeader.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.uuid != null && message.hasOwnProperty("uuid"))
+                writer.uint32(/* id 1, wireType 2 =*/10).string(message.uuid);
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                writer.uint32(/* id 2, wireType 2 =*/18).string(message.filename);
+            if (message.thumbnail != null && message.hasOwnProperty("thumbnail"))
+                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.thumbnail);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified FileHeader message, length delimited. Does not implicitly {@link ChatMessage.FileHeader.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {ChatMessage.IFileHeader} message FileHeader message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        FileHeader.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a FileHeader message from the specified reader or buffer.
+         * @function decode
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {ChatMessage.FileHeader} FileHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FileHeader.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            let end = length === undefined ? reader.len : reader.pos + length, message = new $root.ChatMessage.FileHeader();
+            while (reader.pos < end) {
+                let tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.uuid = reader.string();
+                    break;
+                case 2:
+                    message.filename = reader.string();
+                    break;
+                case 3:
+                    message.thumbnail = reader.bytes();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a FileHeader message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {ChatMessage.FileHeader} FileHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        FileHeader.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a FileHeader message.
+         * @function verify
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        FileHeader.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.uuid != null && message.hasOwnProperty("uuid"))
+                if (!$util.isString(message.uuid))
+                    return "uuid: string expected";
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                if (!$util.isString(message.filename))
+                    return "filename: string expected";
+            if (message.thumbnail != null && message.hasOwnProperty("thumbnail"))
+                if (!(message.thumbnail && typeof message.thumbnail.length === "number" || $util.isString(message.thumbnail)))
+                    return "thumbnail: buffer expected";
+            return null;
+        };
+
+        /**
+         * Creates a FileHeader message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {ChatMessage.FileHeader} FileHeader
+         */
+        FileHeader.fromObject = function fromObject(object) {
+            if (object instanceof $root.ChatMessage.FileHeader)
+                return object;
+            let message = new $root.ChatMessage.FileHeader();
+            if (object.uuid != null)
+                message.uuid = String(object.uuid);
+            if (object.filename != null)
+                message.filename = String(object.filename);
+            if (object.thumbnail != null)
+                if (typeof object.thumbnail === "string")
+                    $util.base64.decode(object.thumbnail, message.thumbnail = $util.newBuffer($util.base64.length(object.thumbnail)), 0);
+                else if (object.thumbnail.length)
+                    message.thumbnail = object.thumbnail;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a FileHeader message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof ChatMessage.FileHeader
+         * @static
+         * @param {ChatMessage.FileHeader} message FileHeader
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        FileHeader.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            let object = {};
+            if (options.defaults) {
+                object.uuid = "";
+                object.filename = "";
+                object.thumbnail = options.bytes === String ? "" : [];
+            }
+            if (message.uuid != null && message.hasOwnProperty("uuid"))
+                object.uuid = message.uuid;
+            if (message.filename != null && message.hasOwnProperty("filename"))
+                object.filename = message.filename;
+            if (message.thumbnail != null && message.hasOwnProperty("thumbnail"))
+                object.thumbnail = options.bytes === String ? $util.base64.encode(message.thumbnail, 0, message.thumbnail.length) : options.bytes === Array ? Array.prototype.slice.call(message.thumbnail) : message.thumbnail;
+            return object;
+        };
+
+        /**
+         * Converts this FileHeader to JSON.
+         * @function toJSON
+         * @memberof ChatMessage.FileHeader
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        FileHeader.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return FileHeader;
+    })();
+
+    return ChatMessage;
+})();
+
+export const RequestFile = $root.RequestFile = (() => {
+
+    /**
+     * Properties of a RequestFile.
+     * @exports IRequestFile
+     * @interface IRequestFile
+     * @property {string|null} [uuid] RequestFile uuid
+     */
+
+    /**
+     * Constructs a new RequestFile.
+     * @exports RequestFile
+     * @classdesc Represents a RequestFile.
+     * @implements IRequestFile
+     * @constructor
+     * @param {IRequestFile=} [properties] Properties to set
+     */
+    function RequestFile(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * RequestFile uuid.
+     * @member {string} uuid
+     * @memberof RequestFile
+     * @instance
+     */
+    RequestFile.prototype.uuid = "";
+
+    /**
+     * Creates a new RequestFile instance using the specified properties.
+     * @function create
+     * @memberof RequestFile
+     * @static
+     * @param {IRequestFile=} [properties] Properties to set
+     * @returns {RequestFile} RequestFile instance
+     */
+    RequestFile.create = function create(properties) {
+        return new RequestFile(properties);
+    };
+
+    /**
+     * Encodes the specified RequestFile message. Does not implicitly {@link RequestFile.verify|verify} messages.
+     * @function encode
+     * @memberof RequestFile
+     * @static
+     * @param {IRequestFile} message RequestFile message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    RequestFile.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.uuid);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified RequestFile message, length delimited. Does not implicitly {@link RequestFile.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof RequestFile
+     * @static
+     * @param {IRequestFile} message RequestFile message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    RequestFile.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a RequestFile message from the specified reader or buffer.
+     * @function decode
+     * @memberof RequestFile
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {RequestFile} RequestFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    RequestFile.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.RequestFile();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.uuid = reader.string();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a RequestFile message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof RequestFile
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {RequestFile} RequestFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    RequestFile.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a RequestFile message.
+     * @function verify
+     * @memberof RequestFile
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    RequestFile.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            if (!$util.isString(message.uuid))
+                return "uuid: string expected";
+        return null;
+    };
+
+    /**
+     * Creates a RequestFile message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof RequestFile
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {RequestFile} RequestFile
+     */
+    RequestFile.fromObject = function fromObject(object) {
+        if (object instanceof $root.RequestFile)
+            return object;
+        let message = new $root.RequestFile();
+        if (object.uuid != null)
+            message.uuid = String(object.uuid);
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a RequestFile message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof RequestFile
+     * @static
+     * @param {RequestFile} message RequestFile
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    RequestFile.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults)
+            object.uuid = "";
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            object.uuid = message.uuid;
+        return object;
+    };
+
+    /**
+     * Converts this RequestFile to JSON.
+     * @function toJSON
+     * @memberof RequestFile
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    RequestFile.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return RequestFile;
+})();
+
+export const RequestedFile = $root.RequestedFile = (() => {
+
+    /**
+     * Properties of a RequestedFile.
+     * @exports IRequestedFile
+     * @interface IRequestedFile
+     * @property {string|null} [uuid] RequestedFile uuid
+     * @property {string|null} [filename] RequestedFile filename
+     * @property {Uint8Array|null} [content] RequestedFile content
+     */
+
+    /**
+     * Constructs a new RequestedFile.
+     * @exports RequestedFile
+     * @classdesc Represents a RequestedFile.
+     * @implements IRequestedFile
+     * @constructor
+     * @param {IRequestedFile=} [properties] Properties to set
+     */
+    function RequestedFile(properties) {
+        if (properties)
+            for (let keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                if (properties[keys[i]] != null)
+                    this[keys[i]] = properties[keys[i]];
+    }
+
+    /**
+     * RequestedFile uuid.
+     * @member {string} uuid
+     * @memberof RequestedFile
+     * @instance
+     */
+    RequestedFile.prototype.uuid = "";
+
+    /**
+     * RequestedFile filename.
+     * @member {string} filename
+     * @memberof RequestedFile
+     * @instance
+     */
+    RequestedFile.prototype.filename = "";
+
+    /**
+     * RequestedFile content.
+     * @member {Uint8Array} content
+     * @memberof RequestedFile
+     * @instance
+     */
+    RequestedFile.prototype.content = $util.newBuffer([]);
+
+    /**
+     * Creates a new RequestedFile instance using the specified properties.
+     * @function create
+     * @memberof RequestedFile
+     * @static
+     * @param {IRequestedFile=} [properties] Properties to set
+     * @returns {RequestedFile} RequestedFile instance
+     */
+    RequestedFile.create = function create(properties) {
+        return new RequestedFile(properties);
+    };
+
+    /**
+     * Encodes the specified RequestedFile message. Does not implicitly {@link RequestedFile.verify|verify} messages.
+     * @function encode
+     * @memberof RequestedFile
+     * @static
+     * @param {IRequestedFile} message RequestedFile message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    RequestedFile.encode = function encode(message, writer) {
+        if (!writer)
+            writer = $Writer.create();
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            writer.uint32(/* id 1, wireType 2 =*/10).string(message.uuid);
+        if (message.filename != null && message.hasOwnProperty("filename"))
+            writer.uint32(/* id 2, wireType 2 =*/18).string(message.filename);
+        if (message.content != null && message.hasOwnProperty("content"))
+            writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.content);
+        return writer;
+    };
+
+    /**
+     * Encodes the specified RequestedFile message, length delimited. Does not implicitly {@link RequestedFile.verify|verify} messages.
+     * @function encodeDelimited
+     * @memberof RequestedFile
+     * @static
+     * @param {IRequestedFile} message RequestedFile message or plain object to encode
+     * @param {$protobuf.Writer} [writer] Writer to encode to
+     * @returns {$protobuf.Writer} Writer
+     */
+    RequestedFile.encodeDelimited = function encodeDelimited(message, writer) {
+        return this.encode(message, writer).ldelim();
+    };
+
+    /**
+     * Decodes a RequestedFile message from the specified reader or buffer.
+     * @function decode
+     * @memberof RequestedFile
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @param {number} [length] Message length if known beforehand
+     * @returns {RequestedFile} RequestedFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    RequestedFile.decode = function decode(reader, length) {
+        if (!(reader instanceof $Reader))
+            reader = $Reader.create(reader);
+        let end = length === undefined ? reader.len : reader.pos + length, message = new $root.RequestedFile();
+        while (reader.pos < end) {
+            let tag = reader.uint32();
+            switch (tag >>> 3) {
+            case 1:
+                message.uuid = reader.string();
+                break;
+            case 2:
+                message.filename = reader.string();
+                break;
+            case 3:
+                message.content = reader.bytes();
+                break;
+            default:
+                reader.skipType(tag & 7);
+                break;
+            }
+        }
+        return message;
+    };
+
+    /**
+     * Decodes a RequestedFile message from the specified reader or buffer, length delimited.
+     * @function decodeDelimited
+     * @memberof RequestedFile
+     * @static
+     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+     * @returns {RequestedFile} RequestedFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    RequestedFile.decodeDelimited = function decodeDelimited(reader) {
+        if (!(reader instanceof $Reader))
+            reader = new $Reader(reader);
+        return this.decode(reader, reader.uint32());
+    };
+
+    /**
+     * Verifies a RequestedFile message.
+     * @function verify
+     * @memberof RequestedFile
+     * @static
+     * @param {Object.<string,*>} message Plain object to verify
+     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+     */
+    RequestedFile.verify = function verify(message) {
+        if (typeof message !== "object" || message === null)
+            return "object expected";
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            if (!$util.isString(message.uuid))
+                return "uuid: string expected";
+        if (message.filename != null && message.hasOwnProperty("filename"))
+            if (!$util.isString(message.filename))
+                return "filename: string expected";
+        if (message.content != null && message.hasOwnProperty("content"))
+            if (!(message.content && typeof message.content.length === "number" || $util.isString(message.content)))
+                return "content: buffer expected";
+        return null;
+    };
+
+    /**
+     * Creates a RequestedFile message from a plain object. Also converts values to their respective internal types.
+     * @function fromObject
+     * @memberof RequestedFile
+     * @static
+     * @param {Object.<string,*>} object Plain object
+     * @returns {RequestedFile} RequestedFile
+     */
+    RequestedFile.fromObject = function fromObject(object) {
+        if (object instanceof $root.RequestedFile)
+            return object;
+        let message = new $root.RequestedFile();
+        if (object.uuid != null)
+            message.uuid = String(object.uuid);
+        if (object.filename != null)
+            message.filename = String(object.filename);
+        if (object.content != null)
+            if (typeof object.content === "string")
+                $util.base64.decode(object.content, message.content = $util.newBuffer($util.base64.length(object.content)), 0);
+            else if (object.content.length)
+                message.content = object.content;
+        return message;
+    };
+
+    /**
+     * Creates a plain object from a RequestedFile message. Also converts values to other types if specified.
+     * @function toObject
+     * @memberof RequestedFile
+     * @static
+     * @param {RequestedFile} message RequestedFile
+     * @param {$protobuf.IConversionOptions} [options] Conversion options
+     * @returns {Object.<string,*>} Plain object
+     */
+    RequestedFile.toObject = function toObject(message, options) {
+        if (!options)
+            options = {};
+        let object = {};
+        if (options.defaults) {
+            object.uuid = "";
+            object.filename = "";
+            object.content = options.bytes === String ? "" : [];
+        }
+        if (message.uuid != null && message.hasOwnProperty("uuid"))
+            object.uuid = message.uuid;
+        if (message.filename != null && message.hasOwnProperty("filename"))
+            object.filename = message.filename;
+        if (message.content != null && message.hasOwnProperty("content"))
+            object.content = options.bytes === String ? $util.base64.encode(message.content, 0, message.content.length) : options.bytes === Array ? Array.prototype.slice.call(message.content) : message.content;
+        return object;
+    };
+
+    /**
+     * Converts this RequestedFile to JSON.
+     * @function toJSON
+     * @memberof RequestedFile
+     * @instance
+     * @returns {Object.<string,*>} JSON object
+     */
+    RequestedFile.prototype.toJSON = function toJSON() {
+        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+    };
+
+    return RequestedFile;
 })();
 
 export { $root as default };

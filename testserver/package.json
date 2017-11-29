@@ -24,7 +24,10 @@
   },
   "dependencies": {
     "google-protobuf": "^3.4.0",
+    "mz": "^2.7.0",
     "protobufjs": "^6.8.0",
+    "sharp": "^0.18.4",
+    "touch": "^3.1.0",
     "uuid": "^3.1.0",
     "ws": "^3.2.0",
     "ws-promise": "^1.5.4"

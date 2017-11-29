@@ -1,9 +1,14 @@
 import WebSocket from 'ws';
+import uuidv4 from 'uuid/v4';
+import sharp from 'sharp';
+import fs from 'mz/fs';
 import proto from './proto/proto';
 import User from "./User";
 import RoomManager from "./RoomManager";
 import UserManager from "./UserManager";
 import * as ProtoUtils from "./ProtoUtils";
+
+const filenames = {};
 
 export default class Server {
     rm;
@@ -71,8 +76,55 @@ export default class Server {
                 await this.broadcast({userMoved: {uuid: user.uuid, room: room.name}});
                 user.moveTo(room);
                 break;
-            case "textMessage":
-                await [...user.room.users].map(u => u.send({textMessage: {userUUID: user.uuid, message: packet.textMessage.message}}));
+            case "requestFile":
+                if(!filenames[packet.requestFile.uuid]) return;
+                const buffer = await fs.readFile(`./imgs/${packet.requestFile.uuid}.jpg`);
+                user.send({requestedFile: {
+                    uuid: packet.requestFile.uuid,
+                    content: new Uint8Array(buffer),
+                    filename: filenames[packet.requestFile.uuid],
+                }});
+                break;
+            case "chatMessage":
+                let message;
+
+                if(packet.chatMessage.fullFile) {
+                    const uuid = uuidv4();
+
+                    let img;
+                    try{
+                        img = await sharp(new Buffer(packet.chatMessage.fullFile.content))
+                            .resize(100, 100)
+                            .jpeg({quality: 30})
+                            .toBuffer();
+                    } catch (e) {
+                        // IGNORE
+                    }
+
+                    await fs.writeFile(`./imgs/${uuid}.jpg`, new Buffer(packet.chatMessage.fullFile.content));
+                    filenames[uuid] = packet.chatMessage.fullFile.filename;
+
+                    message = {
+                        chatMessage: {
+                            userUUID: user.uuid,
+                            textMessage: packet.chatMessage.textMessage,
+                            fileHeader: {
+                                uuid,
+                                filename: packet.chatMessage.fullFile.filename,
+                                thumbnail: img,
+                            }
+                        }
+                    };
+                } else {
+                    message = {
+                        chatMessage: {
+                            userUUID: user.uuid,
+                            textMessage: packet.chatMessage.textMessage
+                        }
+                    };
+                }
+
+                await [...user.room.users].map(u => u.send(message));
                 break;
         }
     };

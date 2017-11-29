@@ -4,35 +4,41 @@ import * as $protobuf from "protobufjs";
 export interface IPacket {
 
     /** Packet handshake */
-    handshake?: IHandshake;
+    handshake?: (IHandshake|null);
 
     /** Packet serverStatus */
-    serverStatus?: IServerStatus;
+    serverStatus?: (IServerStatus|null);
 
     /** Packet userConnected */
-    userConnected?: IUserConnected;
+    userConnected?: (IUserConnected|null);
 
     /** Packet userDisconnected */
-    userDisconnected?: IUserDisconnected;
+    userDisconnected?: (IUserDisconnected|null);
 
     /** Packet roomCreated */
-    roomCreated?: IRoomCreated;
+    roomCreated?: (IRoomCreated|null);
 
     /** Packet roomClosed */
-    roomClosed?: IRoomClosed;
+    roomClosed?: (IRoomClosed|null);
 
     /** Packet joinRoom */
-    joinRoom?: IJoinRoom;
+    joinRoom?: (IJoinRoom|null);
 
     /** Packet userMoved */
-    userMoved?: IUserMoved;
+    userMoved?: (IUserMoved|null);
 
-    /** Packet textMessage */
-    textMessage?: ITextMessage;
+    /** Packet chatMessage */
+    chatMessage?: (IChatMessage|null);
+
+    /** Packet requestFile */
+    requestFile?: (IRequestFile|null);
+
+    /** Packet requestedFile */
+    requestedFile?: (IRequestedFile|null);
 }
 
 /** Represents a Packet. */
-export class Packet {
+export class Packet implements IPacket {
 
     /**
      * Constructs a new Packet.
@@ -64,11 +70,17 @@ export class Packet {
     /** Packet userMoved. */
     public userMoved?: (IUserMoved|null);
 
-    /** Packet textMessage. */
-    public textMessage?: (ITextMessage|null);
+    /** Packet chatMessage. */
+    public chatMessage?: (IChatMessage|null);
+
+    /** Packet requestFile. */
+    public requestFile?: (IRequestFile|null);
+
+    /** Packet requestedFile. */
+    public requestedFile?: (IRequestedFile|null);
 
     /** Packet content. */
-    public content?: string;
+    public content?: ("handshake"|"serverStatus"|"userConnected"|"userDisconnected"|"roomCreated"|"roomClosed"|"joinRoom"|"userMoved"|"chatMessage"|"requestFile"|"requestedFile");
 
     /**
      * Creates a new Packet instance using the specified properties.
@@ -145,11 +157,11 @@ export class Packet {
 export interface IHandshake {
 
     /** Handshake username */
-    username?: string;
+    username?: (string|null);
 }
 
 /** Represents a Handshake. */
-export class Handshake {
+export class Handshake implements IHandshake {
 
     /**
      * Constructs a new Handshake.
@@ -235,14 +247,14 @@ export class Handshake {
 export interface IServerStatus {
 
     /** ServerStatus yourUUID */
-    yourUUID?: string;
+    yourUUID?: (string|null);
 
     /** ServerStatus rooms */
-    rooms?: ServerStatus.IRoom[];
+    rooms?: (ServerStatus.IRoom[]|null);
 }
 
 /** Represents a ServerStatus. */
-export class ServerStatus {
+export class ServerStatus implements IServerStatus {
 
     /**
      * Constructs a new ServerStatus.
@@ -333,14 +345,14 @@ export namespace ServerStatus {
     interface IRoom {
 
         /** Room name */
-        name?: string;
+        name?: (string|null);
 
         /** Room users */
-        users?: IUserConnected[];
+        users?: (IUserConnected[]|null);
     }
 
     /** Represents a Room. */
-    class Room {
+    class Room implements IRoom {
 
         /**
          * Constructs a new Room.
@@ -430,17 +442,17 @@ export namespace ServerStatus {
 export interface IUserConnected {
 
     /** UserConnected uuid */
-    uuid?: string;
+    uuid?: (string|null);
 
     /** UserConnected username */
-    username?: string;
+    username?: (string|null);
 
     /** UserConnected room */
-    room?: string;
+    room?: (string|null);
 }
 
 /** Represents a UserConnected. */
-export class UserConnected {
+export class UserConnected implements IUserConnected {
 
     /**
      * Constructs a new UserConnected.
@@ -532,14 +544,14 @@ export class UserConnected {
 export interface IUserDisconnected {
 
     /** UserDisconnected uuid */
-    uuid?: string;
+    uuid?: (string|null);
 
     /** UserDisconnected reason */
-    reason?: string;
+    reason?: (string|null);
 }
 
 /** Represents a UserDisconnected. */
-export class UserDisconnected {
+export class UserDisconnected implements IUserDisconnected {
 
     /**
      * Constructs a new UserDisconnected.
@@ -628,11 +640,11 @@ export class UserDisconnected {
 export interface IRoomCreated {
 
     /** RoomCreated name */
-    name?: string;
+    name?: (string|null);
 }
 
 /** Represents a RoomCreated. */
-export class RoomCreated {
+export class RoomCreated implements IRoomCreated {
 
     /**
      * Constructs a new RoomCreated.
@@ -718,11 +730,11 @@ export class RoomCreated {
 export interface IRoomClosed {
 
     /** RoomClosed name */
-    name?: string;
+    name?: (string|null);
 }
 
 /** Represents a RoomClosed. */
-export class RoomClosed {
+export class RoomClosed implements IRoomClosed {
 
     /**
      * Constructs a new RoomClosed.
@@ -808,11 +820,11 @@ export class RoomClosed {
 export interface IJoinRoom {
 
     /** JoinRoom name */
-    name?: string;
+    name?: (string|null);
 }
 
 /** Represents a JoinRoom. */
-export class JoinRoom {
+export class JoinRoom implements IJoinRoom {
 
     /**
      * Constructs a new JoinRoom.
@@ -898,14 +910,14 @@ export class JoinRoom {
 export interface IUserMoved {
 
     /** UserMoved uuid */
-    uuid?: string;
+    uuid?: (string|null);
 
     /** UserMoved room */
-    room?: string;
+    room?: (string|null);
 }
 
 /** Represents a UserMoved. */
-export class UserMoved {
+export class UserMoved implements IUserMoved {
 
     /**
      * Constructs a new UserMoved.
@@ -990,97 +1002,502 @@ export class UserMoved {
     public toJSON(): { [k: string]: any };
 }
 
-/** Properties of a TextMessage. */
-export interface ITextMessage {
+/** Properties of a ChatMessage. */
+export interface IChatMessage {
 
-    /** TextMessage userUUID */
-    userUUID?: string;
+    /** ChatMessage userUUID */
+    userUUID?: (string|null);
 
-    /** TextMessage message */
-    message?: string;
+    /** ChatMessage textMessage */
+    textMessage?: (string|null);
+
+    /** ChatMessage fullFile */
+    fullFile?: (ChatMessage.IFileFull|null);
+
+    /** ChatMessage fileHeader */
+    fileHeader?: (ChatMessage.IFileHeader|null);
 }
 
-/** Represents a TextMessage. */
-export class TextMessage {
+/** Represents a ChatMessage. */
+export class ChatMessage implements IChatMessage {
 
     /**
-     * Constructs a new TextMessage.
+     * Constructs a new ChatMessage.
      * @param [properties] Properties to set
      */
-    constructor(properties?: ITextMessage);
+    constructor(properties?: IChatMessage);
 
-    /** TextMessage userUUID. */
+    /** ChatMessage userUUID. */
     public userUUID: string;
 
-    /** TextMessage message. */
-    public message: string;
+    /** ChatMessage textMessage. */
+    public textMessage: string;
+
+    /** ChatMessage fullFile. */
+    public fullFile?: (ChatMessage.IFileFull|null);
+
+    /** ChatMessage fileHeader. */
+    public fileHeader?: (ChatMessage.IFileHeader|null);
 
     /**
-     * Creates a new TextMessage instance using the specified properties.
+     * Creates a new ChatMessage instance using the specified properties.
      * @param [properties] Properties to set
-     * @returns TextMessage instance
+     * @returns ChatMessage instance
      */
-    public static create(properties?: ITextMessage): TextMessage;
+    public static create(properties?: IChatMessage): ChatMessage;
 
     /**
-     * Encodes the specified TextMessage message. Does not implicitly {@link TextMessage.verify|verify} messages.
-     * @param message TextMessage message or plain object to encode
+     * Encodes the specified ChatMessage message. Does not implicitly {@link ChatMessage.verify|verify} messages.
+     * @param message ChatMessage message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encode(message: ITextMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encode(message: IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Encodes the specified TextMessage message, length delimited. Does not implicitly {@link TextMessage.verify|verify} messages.
-     * @param message TextMessage message or plain object to encode
+     * Encodes the specified ChatMessage message, length delimited. Does not implicitly {@link ChatMessage.verify|verify} messages.
+     * @param message ChatMessage message or plain object to encode
      * @param [writer] Writer to encode to
      * @returns Writer
      */
-    public static encodeDelimited(message: ITextMessage, writer?: $protobuf.Writer): $protobuf.Writer;
+    public static encodeDelimited(message: IChatMessage, writer?: $protobuf.Writer): $protobuf.Writer;
 
     /**
-     * Decodes a TextMessage message from the specified reader or buffer.
+     * Decodes a ChatMessage message from the specified reader or buffer.
      * @param reader Reader or buffer to decode from
      * @param [length] Message length if known beforehand
-     * @returns TextMessage
+     * @returns ChatMessage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): TextMessage;
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ChatMessage;
 
     /**
-     * Decodes a TextMessage message from the specified reader or buffer, length delimited.
+     * Decodes a ChatMessage message from the specified reader or buffer, length delimited.
      * @param reader Reader or buffer to decode from
-     * @returns TextMessage
+     * @returns ChatMessage
      * @throws {Error} If the payload is not a reader or valid buffer
      * @throws {$protobuf.util.ProtocolError} If required fields are missing
      */
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): TextMessage;
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ChatMessage;
 
     /**
-     * Verifies a TextMessage message.
+     * Verifies a ChatMessage message.
      * @param message Plain object to verify
      * @returns `null` if valid, otherwise the reason why it is not
      */
     public static verify(message: { [k: string]: any }): (string|null);
 
     /**
-     * Creates a TextMessage message from a plain object. Also converts values to their respective internal types.
+     * Creates a ChatMessage message from a plain object. Also converts values to their respective internal types.
      * @param object Plain object
-     * @returns TextMessage
+     * @returns ChatMessage
      */
-    public static fromObject(object: { [k: string]: any }): TextMessage;
+    public static fromObject(object: { [k: string]: any }): ChatMessage;
 
     /**
-     * Creates a plain object from a TextMessage message. Also converts values to other types if specified.
-     * @param message TextMessage
+     * Creates a plain object from a ChatMessage message. Also converts values to other types if specified.
+     * @param message ChatMessage
      * @param [options] Conversion options
      * @returns Plain object
      */
-    public static toObject(message: TextMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
+    public static toObject(message: ChatMessage, options?: $protobuf.IConversionOptions): { [k: string]: any };
 
     /**
-     * Converts this TextMessage to JSON.
+     * Converts this ChatMessage to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+export namespace ChatMessage {
+
+    /** Properties of a FileFull. */
+    interface IFileFull {
+
+        /** FileFull filename */
+        filename?: (string|null);
+
+        /** FileFull content */
+        content?: (Uint8Array|null);
+    }
+
+    /** Represents a FileFull. */
+    class FileFull implements IFileFull {
+
+        /**
+         * Constructs a new FileFull.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ChatMessage.IFileFull);
+
+        /** FileFull filename. */
+        public filename: string;
+
+        /** FileFull content. */
+        public content: Uint8Array;
+
+        /**
+         * Creates a new FileFull instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns FileFull instance
+         */
+        public static create(properties?: ChatMessage.IFileFull): ChatMessage.FileFull;
+
+        /**
+         * Encodes the specified FileFull message. Does not implicitly {@link ChatMessage.FileFull.verify|verify} messages.
+         * @param message FileFull message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ChatMessage.IFileFull, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified FileFull message, length delimited. Does not implicitly {@link ChatMessage.FileFull.verify|verify} messages.
+         * @param message FileFull message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ChatMessage.IFileFull, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a FileFull message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns FileFull
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ChatMessage.FileFull;
+
+        /**
+         * Decodes a FileFull message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns FileFull
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ChatMessage.FileFull;
+
+        /**
+         * Verifies a FileFull message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a FileFull message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns FileFull
+         */
+        public static fromObject(object: { [k: string]: any }): ChatMessage.FileFull;
+
+        /**
+         * Creates a plain object from a FileFull message. Also converts values to other types if specified.
+         * @param message FileFull
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: ChatMessage.FileFull, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this FileFull to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+
+    /** Properties of a FileHeader. */
+    interface IFileHeader {
+
+        /** FileHeader uuid */
+        uuid?: (string|null);
+
+        /** FileHeader filename */
+        filename?: (string|null);
+
+        /** FileHeader thumbnail */
+        thumbnail?: (Uint8Array|null);
+    }
+
+    /** Represents a FileHeader. */
+    class FileHeader implements IFileHeader {
+
+        /**
+         * Constructs a new FileHeader.
+         * @param [properties] Properties to set
+         */
+        constructor(properties?: ChatMessage.IFileHeader);
+
+        /** FileHeader uuid. */
+        public uuid: string;
+
+        /** FileHeader filename. */
+        public filename: string;
+
+        /** FileHeader thumbnail. */
+        public thumbnail: Uint8Array;
+
+        /**
+         * Creates a new FileHeader instance using the specified properties.
+         * @param [properties] Properties to set
+         * @returns FileHeader instance
+         */
+        public static create(properties?: ChatMessage.IFileHeader): ChatMessage.FileHeader;
+
+        /**
+         * Encodes the specified FileHeader message. Does not implicitly {@link ChatMessage.FileHeader.verify|verify} messages.
+         * @param message FileHeader message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encode(message: ChatMessage.IFileHeader, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Encodes the specified FileHeader message, length delimited. Does not implicitly {@link ChatMessage.FileHeader.verify|verify} messages.
+         * @param message FileHeader message or plain object to encode
+         * @param [writer] Writer to encode to
+         * @returns Writer
+         */
+        public static encodeDelimited(message: ChatMessage.IFileHeader, writer?: $protobuf.Writer): $protobuf.Writer;
+
+        /**
+         * Decodes a FileHeader message from the specified reader or buffer.
+         * @param reader Reader or buffer to decode from
+         * @param [length] Message length if known beforehand
+         * @returns FileHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): ChatMessage.FileHeader;
+
+        /**
+         * Decodes a FileHeader message from the specified reader or buffer, length delimited.
+         * @param reader Reader or buffer to decode from
+         * @returns FileHeader
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): ChatMessage.FileHeader;
+
+        /**
+         * Verifies a FileHeader message.
+         * @param message Plain object to verify
+         * @returns `null` if valid, otherwise the reason why it is not
+         */
+        public static verify(message: { [k: string]: any }): (string|null);
+
+        /**
+         * Creates a FileHeader message from a plain object. Also converts values to their respective internal types.
+         * @param object Plain object
+         * @returns FileHeader
+         */
+        public static fromObject(object: { [k: string]: any }): ChatMessage.FileHeader;
+
+        /**
+         * Creates a plain object from a FileHeader message. Also converts values to other types if specified.
+         * @param message FileHeader
+         * @param [options] Conversion options
+         * @returns Plain object
+         */
+        public static toObject(message: ChatMessage.FileHeader, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+        /**
+         * Converts this FileHeader to JSON.
+         * @returns JSON object
+         */
+        public toJSON(): { [k: string]: any };
+    }
+}
+
+/** Properties of a RequestFile. */
+export interface IRequestFile {
+
+    /** RequestFile uuid */
+    uuid?: (string|null);
+}
+
+/** Represents a RequestFile. */
+export class RequestFile implements IRequestFile {
+
+    /**
+     * Constructs a new RequestFile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRequestFile);
+
+    /** RequestFile uuid. */
+    public uuid: string;
+
+    /**
+     * Creates a new RequestFile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RequestFile instance
+     */
+    public static create(properties?: IRequestFile): RequestFile;
+
+    /**
+     * Encodes the specified RequestFile message. Does not implicitly {@link RequestFile.verify|verify} messages.
+     * @param message RequestFile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRequestFile, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified RequestFile message, length delimited. Does not implicitly {@link RequestFile.verify|verify} messages.
+     * @param message RequestFile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRequestFile, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a RequestFile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RequestFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): RequestFile;
+
+    /**
+     * Decodes a RequestFile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RequestFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): RequestFile;
+
+    /**
+     * Verifies a RequestFile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RequestFile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RequestFile
+     */
+    public static fromObject(object: { [k: string]: any }): RequestFile;
+
+    /**
+     * Creates a plain object from a RequestFile message. Also converts values to other types if specified.
+     * @param message RequestFile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RequestFile, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RequestFile to JSON.
+     * @returns JSON object
+     */
+    public toJSON(): { [k: string]: any };
+}
+
+/** Properties of a RequestedFile. */
+export interface IRequestedFile {
+
+    /** RequestedFile uuid */
+    uuid?: (string|null);
+
+    /** RequestedFile filename */
+    filename?: (string|null);
+
+    /** RequestedFile content */
+    content?: (Uint8Array|null);
+}
+
+/** Represents a RequestedFile. */
+export class RequestedFile implements IRequestedFile {
+
+    /**
+     * Constructs a new RequestedFile.
+     * @param [properties] Properties to set
+     */
+    constructor(properties?: IRequestedFile);
+
+    /** RequestedFile uuid. */
+    public uuid: string;
+
+    /** RequestedFile filename. */
+    public filename: string;
+
+    /** RequestedFile content. */
+    public content: Uint8Array;
+
+    /**
+     * Creates a new RequestedFile instance using the specified properties.
+     * @param [properties] Properties to set
+     * @returns RequestedFile instance
+     */
+    public static create(properties?: IRequestedFile): RequestedFile;
+
+    /**
+     * Encodes the specified RequestedFile message. Does not implicitly {@link RequestedFile.verify|verify} messages.
+     * @param message RequestedFile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encode(message: IRequestedFile, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Encodes the specified RequestedFile message, length delimited. Does not implicitly {@link RequestedFile.verify|verify} messages.
+     * @param message RequestedFile message or plain object to encode
+     * @param [writer] Writer to encode to
+     * @returns Writer
+     */
+    public static encodeDelimited(message: IRequestedFile, writer?: $protobuf.Writer): $protobuf.Writer;
+
+    /**
+     * Decodes a RequestedFile message from the specified reader or buffer.
+     * @param reader Reader or buffer to decode from
+     * @param [length] Message length if known beforehand
+     * @returns RequestedFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): RequestedFile;
+
+    /**
+     * Decodes a RequestedFile message from the specified reader or buffer, length delimited.
+     * @param reader Reader or buffer to decode from
+     * @returns RequestedFile
+     * @throws {Error} If the payload is not a reader or valid buffer
+     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+     */
+    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): RequestedFile;
+
+    /**
+     * Verifies a RequestedFile message.
+     * @param message Plain object to verify
+     * @returns `null` if valid, otherwise the reason why it is not
+     */
+    public static verify(message: { [k: string]: any }): (string|null);
+
+    /**
+     * Creates a RequestedFile message from a plain object. Also converts values to their respective internal types.
+     * @param object Plain object
+     * @returns RequestedFile
+     */
+    public static fromObject(object: { [k: string]: any }): RequestedFile;
+
+    /**
+     * Creates a plain object from a RequestedFile message. Also converts values to other types if specified.
+     * @param message RequestedFile
+     * @param [options] Conversion options
+     * @returns Plain object
+     */
+    public static toObject(message: RequestedFile, options?: $protobuf.IConversionOptions): { [k: string]: any };
+
+    /**
+     * Converts this RequestedFile to JSON.
      * @returns JSON object
      */
     public toJSON(): { [k: string]: any };

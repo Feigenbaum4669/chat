@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import Message from "./Message";
-import {ITextMessage} from "../../proto/proto";
+import {IChatMessage} from "../../proto/proto";
 import {RoomsProvider} from "../rooms/rooms";
 
 @Injectable()
@@ -11,9 +11,9 @@ export class ChatProvider {
 
   }
 
-  public addText(message: ITextMessage) {
+  public addText(message: IChatMessage) {
     const author = this.rooms.users.find(user => user.uuid === message.userUUID);
-    this.messages.push(new Message(author, message.message));
+    this.messages.push(new Message(author, message.textMessage, message.fileHeader));
   }
 
   public clear() {
